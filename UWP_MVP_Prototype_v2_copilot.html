@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Unified Wealth Platform – MVP Prototype</title>
+<style>
+:root{--navy:#1f3a6b;--green:#2f6b4f;--purple:#5b3f94;--blue:#2e6fb7;--ink:#1d2b45;--muted:#5a6780;--line:#dde3ee;--bg:#f3f5f9;--red:#a12a22;--redbg:#fde8e7;--okc:#1f6b3f;--okbg:#e4f4ea;--amber:#8a5a12;--amberbg:#fff2dc}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+button{font:inherit;cursor:pointer}
+.demo{background:#fff4d6;border-bottom:1px solid #ecd48a;color:#5f4700;font-size:12.5px;padding:6px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.demo select{font:inherit;padding:2px 6px;border-radius:6px;border:1px solid #d9c27c;background:#fff}
+.demo .sp{margin-left:auto}
+.top{color:#fff;padding:12px 24px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.top .brand b{font-size:18px}.top .brand span{opacity:.8;margin-left:8px;font-size:13px}
+.nav{display:flex;gap:4px;flex-wrap:wrap}
+.nav a{color:#fff;opacity:.8;text-decoration:none;padding:6px 12px;border-radius:7px;font-size:14px}
+.nav a.on{opacity:1;background:rgba(255,255,255,.16);font-weight:600}
+.nav .cnt{background:#e0473c;border-radius:10px;padding:0 6px;font-size:11.5px;margin-left:4px}
+.user{margin-left:auto;font-size:13px;opacity:.9}
+main{max-width:1240px;margin:0 auto;padding:22px 24px 40px}
+h1{font-size:24px}h2{font-size:17px;margin-bottom:4px}
+.sub{color:var(--muted);font-size:13px;margin-top:3px}
+.grid{display:grid;gap:16px}.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:1fr 1fr}.g21{grid-template-columns:2fr 1fr}.g12{grid-template-columns:1fr 1.25fr}
+@media(max-width:900px){.g3,.g2,.g21,.g12{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px}
+.card h3{font-size:15px;color:#2a3a5c;margin-bottom:4px}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px;gap:12px;flex-wrap:wrap}
+.pill{display:inline-block;font-size:12px;font-weight:600;border-radius:20px;padding:3px 10px}
+.bad{background:var(--redbg);color:var(--red)}.ok{background:var(--okbg);color:var(--okc)}.neu{background:#eef1f6;color:#4a5670}.warn{background:var(--amberbg);color:var(--amber)}
+.btn{border:1px solid var(--blue);color:var(--blue);background:#fff;border-radius:8px;padding:7px 13px;font-weight:600;font-size:13.5px}
+.btn.p{background:var(--blue);color:#fff}.btn.g{border-color:var(--green);color:var(--green)}.btn.gp{background:var(--green);color:#fff;border-color:var(--green)}
+.btn.pu{background:var(--purple);border-color:var(--purple);color:#fff}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;align-items:center}
+table{width:100%;border-collapse:collapse}td,th{padding:9px 8px;border-bottom:1px solid #eef1f6;text-align:left;font-size:13.5px}th{color:var(--muted);font-weight:600;font-size:12.5px}
+tr.click{cursor:pointer}tr.click:hover{background:#f6f8fc}
+.score{font-size:30px;font-weight:700}.score small{font-size:13px;color:var(--muted);font-weight:500}
+.facts{font-size:13px;color:#4a5670;margin-top:10px;line-height:1.55;border-top:1px solid #eef1f6;padding-top:8px}
+.alert{border-left:5px solid #c4382e}
+.ai{background:#f4f1fb;border:1px dashed #8c74c4;border-radius:9px;padding:11px;margin-top:12px;font-size:13.5px;line-height:1.5}
+.ai .l{font-size:12px;font-weight:700;color:#6b4fa0;margin-bottom:4px}
+textarea{width:100%;font:inherit;border:1px solid #c9d1df;border-radius:8px;padding:8px;min-height:90px}
+input[type=text],input[type=email],select.f{font:inherit;border:1px solid #c9d1df;border-radius:8px;padding:8px 10px;width:100%}
+label.f{display:block;font-size:12.5px;color:var(--muted);margin:10px 0 4px}
+.tog{position:relative;width:40px;height:22px;border-radius:11px;background:#c9d1df;border:0;flex:none}
+.tog::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.15s}
+.tog.on{background:var(--okc)}.tog.on::after{left:21px}
+.bl{display:grid;grid-template-columns:110px 1fr 44px;align-items:center;gap:10px;margin-top:9px}
+.track{height:12px;background:#eef1f6}.fill{height:12px;background:#2f8a5b;border-radius:0 4px 4px 0}
+.ms{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #eef1f6}.ms:last-child{border:0}.ms .pill{margin-left:auto}
+.chatbox{display:flex;flex-direction:column;gap:10px;max-height:420px;overflow:auto;padding:4px}
+.q{align-self:flex-end;background:var(--green);color:#fff;border-radius:16px 16px 4px 16px;padding:9px 14px;max-width:75%}
+.a{align-self:flex-start;background:#f2f6fc;border:1px solid #d6e2f3;border-radius:4px 14px 14px 14px;padding:11px 13px;max-width:88%;line-height:1.5}
+.a .src{font-size:12px;color:var(--muted);margin-top:7px;border-top:1px solid #d6e2f3;padding-top:6px}
+.sugs{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.sug{font-size:13px;border:1px solid #c9d6ea;border-radius:16px;padding:5px 12px;background:#fff;color:#2a3a5c}
+.hand{margin-top:12px;display:flex;align-items:center;gap:12px;background:#fbf7ee;border:1px solid #ecd9ae;border-radius:10px;padding:10px 12px;flex-wrap:wrap}
+.disc{font-size:12px;color:var(--muted);margin-top:8px}
+.slot{border:1px solid #c9d1df;border-radius:8px;padding:8px 12px;background:#fff}.slot.on{border-color:var(--green);background:#e8f5ee;font-weight:600}
+.modal-bg{position:fixed;inset:0;background:rgba(20,30,50,.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:10}
+.modal{background:#fff;border-radius:14px;max-width:520px;width:100%;padding:20px;max-height:90vh;overflow:auto}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1d2b45;color:#fff;padding:11px 18px;border-radius:10px;font-size:13.5px;z-index:20;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.login{max-width:900px;margin:40px auto;padding:0 16px}
+.persona{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;text-align:left;width:100%}
+.persona:hover{border-color:var(--blue);box-shadow:0 4px 14px rgba(46,111,183,.12)}
+.persona .av{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;margin-bottom:12px}
+.persona h3{font-size:17px}.persona p{color:var(--muted);font-size:13px;margin-top:6px;line-height:1.5}
+.idbox{max-width:420px;margin:50px auto;background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px;text-align:center}
+.qr{width:150px;height:150px;margin:16px auto;background:repeating-linear-gradient(45deg,#1d2b45 0 6px,#fff 6px 12px),#fff;border:10px solid #fff;outline:1px solid var(--line);opacity:.85}
+.steps{display:flex;gap:6px;justify-content:center;margin-bottom:14px}.steps span{width:28px;height:4px;border-radius:2px;background:#dde3ee}.steps span.on{background:var(--green)}
+.log{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px}
+.empty{color:var(--muted);text-align:center;padding:24px}
+.chip{display:inline-block;font-size:12px;background:#eef1f6;border-radius:6px;padding:2px 8px;margin-right:4px}
+
+.eye{border:1px solid var(--line);background:#fff;border-radius:8px;width:34px;height:30px;display:inline-flex;align-items:center;justify-content:center;color:#4a5670}
+.eye:hover{border-color:#9fb0cc}
+.cardhd{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.arow{border-bottom:1px solid #eef1f6}.arow:last-of-type{border:0}
+.abtn{display:grid;grid-template-columns:18px 104px 1fr 120px;align-items:center;gap:10px;width:100%;background:none;border:0;padding:9px 0;text-align:left;color:inherit}
+.abtn.static{grid-template-columns:104px 1fr 120px;cursor:default}
+.abtn .amt{text-align:right;font-weight:600;white-space:nowrap}.abtn .amt small{color:var(--muted);font-weight:500;margin-left:4px}
+.caret{color:var(--muted);transition:.15s;font-size:12px}.caret.open{transform:rotate(90deg)}
+.hold{background:#f7f9fc;border-radius:8px;margin:0 0 10px 28px;padding:4px 12px}
+.hold div{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eef1f6;font-size:13px}.hold div:last-child{border:0}
+.kan{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}@media(max-width:900px){.kan{grid-template-columns:1fr}}
+.col{background:#eef1f6;border-radius:12px;padding:12px}.col h3{font-size:14px;display:flex;justify-content:space-between;margin-bottom:10px}
+.col h3 span{background:#fff;border-radius:10px;padding:0 8px;font-size:12px;color:var(--muted)}
+.kc{background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px 12px;margin-bottom:8px;border-left:4px solid}
+.kc b{display:block;font-size:13.5px;line-height:1.4}.kc span{font-size:12px;color:var(--muted)}
+.kpi p.cap{font-size:12px;color:var(--muted);margin-top:2px}
+details summary{cursor:pointer;color:var(--blue);font-size:13px;margin-top:8px;list-style:none}details summary::-webkit-details-marker{display:none}
+.signal{font-size:13px;margin-top:8px;color:#2a3a5c}
+
+.cp{border:1px solid #c9bfe6;border-radius:12px;background:#fbfaff;padding:16px;margin-top:0}
+.cphd{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cphd b{font-size:15px;color:#3e2b6b}
+.tag{font-size:11.5px;font-weight:700;border-radius:20px;padding:2px 9px;letter-spacing:.2px}
+.tag.ag{background:#e9e2f8;color:#4b3290}.tag.gen{background:#e7f0fb;color:#1f4f8f}
+.so{display:grid;grid-template-columns:150px 1fr;gap:6px 12px;font-size:13.5px;margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px}
+.so dt{color:var(--muted);font-weight:600}.so dd{margin:0}
+.cplog{margin-top:12px;background:#1d2340;color:#dfe4f5;border-radius:10px;padding:12px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.7}
+.cplog .k{color:#b9a6f0}.cplog .ok{color:#8fd6a8;background:none}.cplog .warn{color:#f3c87a;background:none}.cplog .dim{color:#8f98b8}
+.acts{margin-top:12px;display:grid;gap:8px}
+.act{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.5px}
+.act .n{width:22px;height:22px;border-radius:50%;background:#e9e2f8;color:#4b3290;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex:none}
+.act.done .n{background:var(--okbg);color:var(--okc)}
+.bound{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.5}
+.inbox{border-left:5px solid var(--green)}
+</style></head><body>
+<div class="demo"><b>MVP prototype · fictional data</b><span>Switch user:</span>
+<select id="who" onchange="switchUser(this.value)"><option value="">— start screen —</option><option value="rm">J. Ong (Relationship Manager)</option><option value="holder">Mr Lim K. H. (Wealth holder)</option><option value="heir">Lim S. Y. (Heir)</option></select>
+<span class="sp">Demo Bank · Unified Wealth Platform</span><button class="btn" style="padding:3px 10px;font-size:12px" onclick="resetDemo()">Reset demo</button></div>
+<div id="bar"></div>
+<main id="app"></main>
+<div id="layer"></div>
+<script>
+// ---------- state ----------
+const ASSETS=[
+ {k:'eq',l:'Equities',p:40,v:16.8,h:[['Global equity fund',9.2],['Asia equity portfolio',5.1],['Singapore blue-chip basket',2.5]]},
+ {k:'fi',l:'Fixed income',p:35,v:14.7,h:[['SGD government bonds',6.0],['Investment-grade bond fund',5.7],['Asia credit notes',3.0]]},
+ {k:'ca',l:'Cash',p:15,v:6.3,h:[['SGD deposits',4.1],['USD deposits',2.2]]},
+ {k:'al',l:'Alternatives',p:10,v:4.2,h:[['Private equity fund (2022 vintage)',2.4],['Real-estate fund',1.8]]}];
+const MILESTONES=[
+ {t:'Will reviewed with the bank\'s estate-planning team',s:'done',d:'Completed Aug 2026'},
+ {t:'Children onboarded to the family portal',s:'done',d:'Completed Jan 2026'},
+ {t:'Family trust structure set up',s:'prog',d:'Target Q4 2026'},
+ {t:'Trustee nominated',s:'prog',d:'Target Q4 2026'},
+ {t:'Family meeting with RM to walk through the plan',s:'todo',d:'Planned Q1 2027'},
+ {t:'Next-gen investing session for S. Y. and J. W.',s:'todo',d:'Planned Q2 2027'}];
+const init=()=>({
+ user:null, hide:{holder:false,heir:false}, open:{},
+ heirs:{sy:{name:'Lim S. Y.',rel:'Daughter',age:33,score:38,status:'bad',joined:'Jan 2026',signal:'Logins down 60% in 90 days · no RM contact for 11 months',facts:['Viewed private-markets content 5 times','Has not opened the portfolio summary since April']},
+        jw:{name:'Lim J. W.',rel:'Son',age:30,score:74,status:'ok',joined:'Jan 2026',signal:'Monthly logins · video call with RM 6 weeks ago',facts:['2 assistant questions this month']}},
+ perms:{sy:{summary:true,holdings:false,estate:true,assistant:true},jw:{summary:true,holdings:false,estate:true,assistant:true}},
+ invites:[],
+ alerts:[{id:1,fam:'Lim Family',heir:'sy',title:'Lim S. Y. is disengaging',sev:'High',status:'open',
+   draft:"S. Y. has read five private-markets explainers and asked the assistant twice about minimum ticket sizes. She has not viewed her parent's portfolio summary since April. Suggested talking points: the bank's private-markets shelf and how it fits the family's estate plan."},
+  {id:2,fam:'Tan Family',heir:null,title:'Tan W. L. has not logged in since onboarding',sev:'Medium',status:'open',draft:'W. L. activated access 4 months ago but has not returned. Suggested action: a short welcome call to walk through the portal.'},
+  {id:3,fam:'Ng Family',heir:null,title:'Ng K. Y. asked about overseas property financing',sev:'Low',status:'open',draft:'K. Y. asked the assistant three questions on overseas property loans. Suggested action: introduce the lending specialist.'}],
+ chat:{holder:[],heir:[]}, meetings:[], audit:[], optin:true,
+ cp:{state:'idle',steps:[],msg:'',slots:[],acts:[],sharedNote:''}, inbox:[]
+});
+let S=init();
+const log=(who,what)=>S.audit.unshift({t:new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}),who,what});
+log('System','Demo session started');
+
+// ---------- helpers ----------
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function toast(m){document.querySelectorAll('.toast').forEach(x=>x.remove());const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+function modal(html){$('#layer').innerHTML=`<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal">${html}</div></div>`}
+function closeModal(){$('#layer').innerHTML=''}
+function go(h){location.hash=h}
+const ROLES={rm:{color:'var(--navy)',label:'RM workspace',name:'J. Ong',home:'#/rm/alerts',nav:[['#/rm/alerts','Alerts'],['#/rm/families','Families'],['#/rm/family/lim','Lim Family'],['#/rm/audit','Audit trail']]},
+ holder:{color:'var(--purple)',label:'Family portal · Wealth holder',name:'Mr Lim K. H.',home:'#/holder/overview',nav:[['#/holder/overview','Overview'],['#/holder/assistant','AI Assistant'],['#/holder/estate','Estate plan'],['#/holder/access','Family access'],['#/holder/rm','My RM']]},
+ heir:{color:'var(--green)',label:'Family portal',name:'Lim S. Y.',home:'#/heir/overview',nav:[['#/heir/overview','Overview'],['#/heir/assistant','AI Assistant'],['#/heir/estate','Estate plan'],['#/heir/rm','My RM']]}};
+const BTN={holder:'pu',heir:'gp'};
+function switchUser(u){S.user=u||null;go(u?ROLES[u].home:'#/')}
+function resetDemo(){S=init();log('System','Demo reset');$('#who').value='';go('#/');render()}
+function bar(){const u=S.user;if(!u){$('#bar').innerHTML='';return}
+ const r=ROLES[u],h=location.hash;const open=S.alerts.filter(a=>a.status==='open').length;
+ $('#bar').innerHTML=`<div class="top" style="background:${r.color}"><div class="brand"><b>Unified Wealth Platform</b><span>${r.label}</span></div>
+ <nav class="nav">${r.nav.map(([href,t])=>`<a href="${href}" class="${h.startsWith(href)?'on':''}">${t}${t==='Alerts'&&open?`<span class="cnt">${open}</span>`:''}</a>`).join('')}</nav>
+ <div class="user">Signed in as <b>${r.name}</b> · <a href="#/" style="color:#fff">Sign out</a></div></div>`}
+const EYE_OPEN='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+const EYE_OFF='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l18 18M10.6 5.1A10.6 10.6 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.2M6.6 6.6C3.8 8.4 2 12 2 12s3.5 7 10 7c1.8 0 3.4-.5 4.8-1.3M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+const money=(v,role)=>S.hide[role]?'SGD ••••':`SGD ${v.toFixed(1)}m`;
+
+// ---------- shared components ----------
+function portfolio(role){const own=role==='holder',p=S.perms.sy;
+ if(!own&&!p.summary)return `<div class="card"><h3>Family portfolio summary</h3><p class="empty">🔒 Your father has not shared the portfolio summary.</p></div>`;
+ const drill=own||p.holdings;
+ return `<div class="card"><div class="cardhd"><div><h3>${own?'Portfolio summary':'Family portfolio summary'}</h3><p class="sub">${own?'All accounts with Demo Bank · updated daily':'Shared by Mr Lim K. H. · updated daily'}</p></div>
+ <button class="eye" onclick="S.hide.${role}=!S.hide.${role};render()" aria-label="${S.hide[role]?'Show':'Hide'} amounts" title="${S.hide[role]?'Show':'Hide'} amounts">${S.hide[role]?EYE_OFF:EYE_OPEN}</button></div>
+ <div class="score" style="margin:6px 0 4px">${S.hide[role]?'SGD ••••':'SGD 42.0m'} <small>total value</small></div>
+ ${ASSETS.map(a=>{const k=role+a.k,o=S.open[k];
+   const line=`<span>${a.l}</span><div class="track"><div class="fill" style="width:${a.p}%"></div></div><span class="amt">${a.p}%<small>${money(a.v,role)}</small></span>`;
+   return drill?`<div class="arow"><button class="abtn" onclick="S.open['${k}']=!S.open['${k}'];render()" aria-expanded="${!!o}"><span class="caret ${o?'open':''}">▶</span>${line}</button>
+   ${o?`<div class="hold">${a.h.map(([n,v])=>`<div><span>${n}</span><b>${money(v,role)}</b></div>`).join('')}</div>`:''}</div>`
+   :`<div class="arow"><div class="abtn static">${line}</div></div>`}).join('')}
+ <p class="sub" style="margin-top:10px">${drill?(own?'Click an asset class to see where it is invested.':'Holdings shared by your father · click an asset class for detail.'):'🔒 Individual holdings are not shared with you. Your father can change this.'}</p></div>`}
+
+const KB={
+ pm:{q:'What is the minimum investment for private-market funds?',a:"Private-market funds usually have higher minimum investments than public funds and lock your money in for several years, so they suit long-term, accredited investors. The bank's private-markets shelf includes funds with different minimums and holding periods.",src:'Bank guide “Introduction to private markets” · Product shelf overview'},
+ trust:{q:'How does a family trust work?',a:'A family trust holds assets on behalf of family members. A trustee manages the assets according to rules the founder sets, which can make it easier to pass wealth on and to plan when beneficiaries receive it.',src:'Bank guide “Trusts and estate planning basics”'},
+ tax:{q:'How does inheritance tax generally work in Singapore?',a:"Singapore does not have an inheritance tax: estate duty was abolished for deaths on or after 15 February 2008. Assets held in other countries can still be subject to that country's inheritance or estate taxes, so families with overseas property or accounts should plan for this. For your family's situation, your RM can bring in the bank's estate-planning specialists.",src:'Bank guide “Estate planning in Singapore”'},
+ mix:{q:'Explain our asset mix',a:'The portfolio is 40% equities for growth, 35% fixed income for steady income, 15% cash for flexibility and 10% alternatives. It is a fairly balanced mix that limits large swings in value.',src:'Portfolio summary · Bank guide “Asset classes explained”'},
+ access:{q:'What happens when I change what my children can see?',a:'Changes apply immediately. Your children only ever see what you switch on, you can revoke access at any time, and every view is logged in the bank\'s audit trail.',src:'Platform help “Family access”'}};
+const SUGG={holder:['tax','trust','mix','access'],heir:['pm','tax','trust','mix']};
+const who=r=>r==='holder'?'Mr Lim K. H.':'Lim S. Y.';
+function ask(role,key,free){let q,a,src;
+ if(free!==undefined){q=free;if(/\b(should i|recommend|advice|advise|suit|best for me|buy|sell)\b/i.test(free)){a="That is a question about what suits you personally, which is investment advice, so I can't answer it. Would you like me to pass it to your RM, J. Ong? Nothing is shared unless you say yes.";src='Guardrail: personal advice · not shared without your consent'}else{a="I can explain general concepts using the bank's approved guides. For a view on what suits your situation, please speak to your RM, J. Ong.";src='Assistant policy: explain-only'}}
+ else{({q,a,src}=KB[key]);if(key==='mix'&&role==='heir'&&!S.perms.sy.summary){a="Your father hasn't shared the family portfolio summary with you, so I can't discuss it. I can explain asset classes in general if that helps.";src='Consent check: portfolio summary not shared'}}
+ S.chat[role].push({q,ref:false},{a,src,ask:src.startsWith('Guardrail')});log(who(role),`Asked assistant: "${q}"`);log('AI assistant',src.startsWith('Guardrail')?'Declined personal-advice question · asked client before sharing':`Answered from approved content (${src.split('·')[0].trim()})`);
+ const t=`#/${role}/assistant`;if(location.hash!==t)go(t);else render()}
+function shareQ(role,i){const c=S.chat[role];c[i].ask=false;c[i-1].ref=true;
+ c.push({a:"Done. J. Ong now has your question and will follow up with you. Only this question was shared.",src:'Shared with your consent'});
+ log(who(role),`Chose to share a question with J. Ong: "${c[i-1].q}"`);toast('Question shared with J. Ong · with your consent');render()}
+function keepPrivate(role,i){const c=S.chat[role];c[i].ask=false;
+ c.push({a:"Understood. Your question stays private and your RM will not see it. If you like, I can explain how private-market funds work in general.",src:'Kept private · recorded only for regulatory purposes'});
+ log(who(role),'Chose to keep an advice question private');render()}
+function sugChips(role){const asked=S.chat[role].filter(m=>m.q).map(m=>m.q);
+ return SUGG[role].filter(k=>!asked.includes(KB[k].q)).map(k=>`<button class="sug" onclick="ask('${role}','${k}')">${KB[k].q}</button>`).join('')}
+function assistant(role){if(role==='heir'&&!S.perms.sy.assistant)return `<p class="empty">🔒 Your father has not enabled the assistant for you.</p>`;
+ const c=S.chat[role];
+ return `<div class="hd"><div><h1>AI Wealth Assistant</h1><p class="sub" style="display:flex;gap:8px;flex-wrap:wrap"><span class="tag gen">GENERATIVE · answers only, takes no actions</span><span class="pill" style="background:#e7f0fb;color:var(--blue)">Explain-only · bank-approved content</span></p></div></div>
+ <div class="card"><div class="chatbox" id="cb">${c.length?c.map((m,i)=>m.q?`<div class="q" style="background:${ROLES[role].color}">${esc(m.q)}</div>`:`<div class="a">✦ ${esc(m.a)}<div class="src">Source: ${esc(m.src)}</div>${m.ask?`<div class="row" style="margin-top:8px;flex-wrap:wrap"><button class="btn ${BTN[role]}" onclick="shareQ('${role}',${i})">Yes, ask J. Ong</button><button class="btn" onclick="keepPrivate('${role}',${i})">No, keep it private</button></div>`:''}</div>`).join(''):`<p class="empty">Ask anything about ${role==='holder'?'your portfolio, estate planning':'the family\'s portfolio, trusts'} or investing in general.</p>`}</div>
+ ${c.length?`<div class="hand"><span>Want advice on your own situation? Your RM can walk you through it.</span><button class="btn ${BTN[role]}" style="margin-left:auto" onclick="book('${role}')">Book a video call with J. Ong</button></div>`:''}
+ <div class="sugs">${sugChips(role)}</div>
+ <form class="row" style="margin-top:12px" onsubmit="event.preventDefault();const v=this.m.value.trim();if(v)ask('${role}',null,v)"><input type="text" name="m" placeholder="Ask a question… (try “Should I invest in private equity?”)" aria-label="Ask a question"><button class="btn ${BTN[role]}">Send</button></form>
+ <p class="disc">The assistant explains; it does not give personal investment advice. Conversations are recorded for regulatory purposes. Your RM sees a question only if you choose to share it.</p></div>`}
+function kanban(role){if(role==='heir'&&!S.perms.sy.estate)return '<p class="empty">🔒 Your father has not shared the estate plan.</p>';
+ const cols=[['done','Done','#2f8a5b'],['prog','In progress','#d9822b'],['todo','Not started','#8a94a8']];
+ return `<div class="hd"><div><h1>Estate plan</h1><p class="sub">${role==='holder'?'Milestones you share with your family':'Shared by Mr Lim K. H.'} · timeline to Q2 2027</p></div></div>
+ <div class="kan">${cols.map(([s,t,c])=>{const items=MILESTONES.filter(m=>m.s===s);return `<div class="col"><h3>${t}<span>${items.length}</span></h3>${items.map(m=>`<div class="kc" style="border-left-color:${c}"><b>${m.t}</b><span>${m.d}</span></div>`).join('')}</div>`}).join('')}</div>
+ <div class="card" style="margin-top:16px;border-style:dashed"><h3>Inheritance and gifting scenarios</h3><p class="sub">Coming in a later phase: tax and inheritance scenarios on an auditable rules engine.</p></div>`}
+function rmCard(role){const mine=S.meetings.filter(m=>m.role===role);
+ return `<div class="card"><h3>Your relationship manager</h3><div class="row" style="margin-top:8px"><div style="width:44px;height:44px;border-radius:50%;background:#dce7f7;color:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700">JO</div><div><b>J. Ong</b><div class="sub">Relationship Manager · Lim Family</div></div><button class="btn ${BTN[role]}" style="margin-left:auto" onclick="book('${role}')">Book a video call</button></div>
+ <h3 style="margin-top:14px">Upcoming meetings</h3>${mine.length?mine.map(m=>`<div class="ms">📹 ${m.slot}<span class="pill ok">Booked</span></div>`).join(''):'<p class="sub" style="margin-top:4px">No meetings booked</p>'}</div>`}
+const rmPage=role=>`<div class="hd"><div><h1>My relationship manager</h1><p class="sub">J. Ong looks after your family's relationship with the bank and gives advice on what suits ${role==='holder'?'your plans':'your own goals'}.</p></div></div><div class="grid g2">${rmCard(role)}<div class="card"><h3>Topics you can discuss</h3><ul style="margin:8px 0 0 18px;line-height:1.8">${role==='holder'?'<li>Reviewing the estate plan and trust structure</li><li>Preparing your children for the transfer</li><li>Changes to your portfolio</li>':'<li>Investment options that suit your goals</li><li>Understanding the family\'s estate plan</li><li>Opening your own account</li>'}</ul></div></div>`;
+let pick=null;
+function book(role){pick=null;const slots=['Tue 10:00','Tue 15:30','Wed 11:00','Thu 17:00'];
+ const topics=role==='holder'?['Reviewing the estate plan','Preparing my children for the transfer','Something else']:['Private-market options','Understanding the family\'s estate plan','Something else'];
+ modal(`<h2>Book a video call with J. Ong</h2><label class="f">Topic</label><select class="f" id="bt">${topics.map(t=>`<option>${t}</option>`).join('')}</select>
+ <label class="f">Choose a time</label><div class="row" style="flex-wrap:wrap">${slots.map(s=>`<button class="slot" onclick="pick='${s}';document.querySelectorAll('.slot').forEach(b=>b.classList.toggle('on',b.textContent==='${s}'));$('#bk').disabled=false">${s}</button>`).join('')}</div>
+ <div class="row" style="margin-top:16px;justify-content:flex-end"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn ${BTN[role]}" id="bk" disabled onclick="doBook('${role}')">Confirm</button></div>`)}
+function doBook(role){const t=$('#bt').value;S.meetings.push({role,who:who(role),slot:`${pick} · ${t}`});log(who(role),`Booked video call (${pick}, ${t})`);
+ if(role==='heir'){const h=S.heirs.sy;h.score=52;h.status='warn';h.signal='Booked a video call with the RM · engagement recovering'}
+ closeModal();toast('Video call booked · J. Ong notified');render()}
+
+// ---------- screens ----------
+const V={};
+V['#/']=()=>`<div class="login"><h1>Unified Wealth Platform</h1><p class="sub" style="font-size:14px">MVP prototype. Choose who you are to see their view. Every screen uses fictional data.</p>
+<div class="grid g3" style="margin-top:22px">
+<button class="persona" onclick="switchUser('rm');$('#who').value='rm'"><div class="av" style="background:#dce7f7;color:var(--navy)">JO</div><h3>Relationship Manager</h3><p>J. Ong sees alerts on disengaging heirs and runs the agentic RM Copilot, which acts only after his approval.</p></button>
+<button class="persona" onclick="switchUser('holder');$('#who').value='holder'"><div class="av" style="background:#e4dbf4;color:var(--purple)">LK</div><h3>Wealth holder</h3><p>Mr Lim invites his children, decides exactly what each of them can see, and talks to his RM.</p></button>
+<button class="persona" onclick="go('#/onboard/1')"><div class="av" style="background:#d4ecdd;color:var(--green)">SY</div><h3>Heir (first sign-in)</h3><p>Lim S. Y. accepts her father's invitation, verifies her identity and uses the explain-only AI assistant.</p></button>
+</div>
+<div class="card" style="margin-top:22px"><h3>Suggested demo path (about 2 minutes)</h3>
+<ol style="margin:8px 0 0 18px;line-height:1.8;color:#2a3a5c"><li><b>Wealth holder</b> → Family access: change what a child can see, or invite a family member.</li><li><b>Heir</b> → accept the invite, ask the AI assistant a question, book a video call.</li><li><b>RM</b> → Lim Family: run the RM Copilot, watch it plan and call tools, then approve its actions.</li><li><b>Heir</b> → the RM’s invitation appears; book a slot. Try asking the assistant “Should I invest in private equity?”</li><li><b>RM</b> → Audit trail: every view, AI answer and decision is logged.</li></ol></div></div>`;
+V['#/onboard/1']=()=>`<div class="idbox"><div class="steps"><span class="on"></span><span></span><span></span></div>
+<p class="sub">Invitation · Demo Bank</p><h2 style="margin-top:8px">Mr Lim K. H. has invited you to the Lim Family portal</h2>
+<p class="sub" style="margin-top:10px;line-height:1.6">You'll be able to see the information he has chosen to share with you, learn about the family's plans, and talk to the family's relationship manager.</p>
+<button class="btn gp" style="margin-top:18px;width:100%" onclick="go('#/onboard/2')">Accept invitation</button></div>`;
+V['#/onboard/2']=()=>`<div class="idbox"><div class="steps"><span class="on"></span><span class="on"></span><span></span></div>
+<h2>Verify your identity</h2><p class="sub" style="margin-top:6px">Mock-up of national digital-ID sign-in (Singpass / Myinfo in production)</p>
+<div class="qr" aria-label="placeholder QR code"></div><p class="sub">Scan with your digital-ID app</p>
+<button class="btn gp" style="margin-top:16px;width:100%" onclick="go('#/onboard/3')">Simulate successful verification</button></div>`;
+V['#/onboard/3']=()=>`<div class="idbox" style="text-align:left"><div class="steps"><span class="on"></span><span class="on"></span><span class="on"></span></div>
+<h2>Confirm your details</h2><p class="sub">Retrieved with your consent from Myinfo (mock)</p>
+<table style="margin-top:10px"><tr><td>Name</td><td><b>Lim S. Y.</b></td></tr><tr><td>Relationship</td><td>Daughter of Mr Lim K. H.</td></tr><tr><td>Email</td><td>sy.lim@example.com</td></tr></table>
+<p class="sub" style="margin-top:12px;line-height:1.5">Your father controls what you can see. He can change this at any time, and the bank logs every access.</p>
+<div style="margin-top:12px;background:#f6f8fc;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:12.5px;line-height:1.5;color:#2a3a5c"><b>How your data is used</b><br>Your conversations with the AI assistant are recorded to meet regulatory requirements. Your RM sees a question only if you choose to share it, and your father never sees your questions.</div>
+<label class="row" style="margin-top:10px;font-size:13px"><input type="checkbox" id="optin"> Optional: let my RM use my portal activity to tailor the service to me</label>
+<label class="row" style="margin-top:8px;font-size:13px"><input type="checkbox" id="agree" onchange="$('#fin').disabled=!this.checked"> I agree to the portal terms and the bank's privacy notice</label>
+<button id="fin" class="btn gp" style="margin-top:14px;width:100%" disabled onclick="S.optin=$('#optin').checked;log('Lim S. Y.','Completed onboarding with digital ID · activity insights '+(S.optin?'opted in':'declined'));S.user='heir';$('#who').value='heir';go('#/heir/overview')">Enter the family portal</button></div>`;
+
+// ---- RM ----
+const statusPill=s=>({open:'<span class="pill bad">Needs review</span>',approved:'<span class="pill ok">✓ Outreach approved</span>',dismissed:'<span class="pill neu">Dismissed</span>'}[s]);
+V['#/rm/alerts']=()=>{const sevc={High:'bad',Medium:'warn',Low:'neu'};
+ return `<div class="hd"><div><h1>Alerts</h1><p class="sub">Next-generation engagement alerts for your families · scored daily</p></div></div>
+ <div class="card"><table><tr><th>Family</th><th>Alert</th><th>Risk</th><th>Status</th><th></th></tr>
+ ${S.alerts.map(a=>`<tr class="click" onclick="go('${a.heir?'#/rm/family/lim':'#/rm/alert/'+a.id}')"><td><b>${a.fam}</b></td><td>${esc(a.title)}</td><td><span class="pill ${sevc[a.sev]}">${a.sev}</span></td><td>${statusPill(a.status)}</td><td style="color:var(--blue)">Open ›</td></tr>`).join('')}</table></div>`};
+V['#/rm/alert']=id=>{const a=S.alerts.find(x=>x.id==id);return `<a href="#/rm/alerts" class="sub">‹ Back to alerts</a><h1 style="margin-top:8px">${a.fam}</h1><div style="margin-top:14px">${alertCard(a)}</div><p class="sub" style="margin-top:14px">The full family dashboard is built for the Lim Family only in this prototype.</p>`};
+const FAMS=[['Tan',27,3,4,55,'warn'],['Ng',63,4,5,69,'ok'],['Chua',35,1,2,47,'warn'],['Goh',22,1,1,81,'ok'],['Koh',48,1,2,62,'ok'],['Lee',19,1,2,58,'warn'],['Low',31,0,1,null,'neu'],['Seah',54,1,2,73,'ok'],['Teo',16,1,1,66,'ok'],['Wong',72,1,1,77,'ok'],['Yeo',25,1,1,84,'ok']];
+V['#/rm/families']=()=>{const sy=S.heirs.sy;
+ const rows=[{n:'Lim',aum:42,act:2,inv:2,sc:sy.score,st:sy.status,lim:true},...FAMS.map(([n,aum,act,inv,sc,st])=>({n,aum,act,inv,sc,st}))]
+  .sort((x,y)=>(x.sc??101)-(y.sc??101));
+ const invited=rows.reduce((t,r)=>t+r.inv,0),active=rows.reduce((t,r)=>t+r.act,0);
+ return `<div class="hd"><div><h1>Families</h1><p class="sub">Your ${rows.length} families in the pilot · sorted by lowest heir engagement, so families at risk come first</p></div></div>
+<div class="card"><table><tr><th>Family</th><th>AUM (SGD)</th><th>Heirs active / invited</th><th>Lowest heir engagement score</th><th></th></tr>
+${rows.map(r=>`<tr class="${r.lim?'click':''}" ${r.lim?`onclick="go('#/rm/family/lim')"`:''}><td><b>${r.n} Family</b></td><td>${r.aum}m</td><td>${r.act} / ${r.inv}</td><td>${r.sc==null?'<span class="pill neu">No heir active yet</span>':`<span class="pill ${r.st}">${r.sc}/100</span>`}</td><td>${r.lim?'<span style="color:var(--blue)">Open ›</span>':''}</td></tr>`).join('')}</table>
+<p class="sub" style="margin-top:10px">In this prototype, only the Lim Family dashboard is built out.</p></div>
+<h2 style="margin-top:22px">Pilot progress</h2><p class="sub">Totals across the ${rows.length} families above</p>
+<div class="grid g3" style="margin-top:10px"><div class="card kpi"><p class="sub">Heirs invited</p><div class="score">${invited}</div><p class="cap">Invitations sent by wealth holders</p></div>
+<div class="card kpi"><p class="sub">Heirs activated</p><div class="score">${active} <small>(${Math.round(active/invited*100)}%)</small></div><p class="cap">Completed digital-ID sign-up and logged in</p></div>
+<div class="card kpi"><p class="sub">RM–heir meetings</p><div class="score">${9+S.meetings.filter(m=>m.role==='heir').length}</div><p class="cap">Held or booked this quarter</p></div></div>`};
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const CP_MSG="Hi S. Y., I noticed you have been exploring private markets on the portal. I would be glad to walk you through how private-market funds work and how they could sit alongside your family's plans. Would one of these times suit you for a short video call?";
+function cpStep(html){S.cp.steps.push(html);render()}
+async function runCopilot(){const cp=S.cp;if(cp.state==='running')return;cp.state='running';cp.steps=[];cp.acts=[];render();
+ const p=S.perms.sy,qs=S.chat.heir.filter(m=>m.ref).map(m=>m.q);
+ log('RM Copilot','Started run for alert "Lim S. Y. is disengaging"');
+ cpStep('<span class="k">GOAL</span> Re-engage Lim S. Y. before the transfer. <span class="dim">Plan: check consent → read activity → retrieve approved content → find RM slots → draft actions</span>');await sleep(650);
+ cpStep(`<span class="k">TOOL</span> consent_service.check("Lim S. Y.") → summary ${p.summary?'<span class="ok">allowed</span>':'<span class="warn">blocked</span>'}, holdings ${p.holdings?'<span class="ok">allowed</span>':'<span class="warn">blocked → excluded from draft</span>'}`);log('RM Copilot','Tool call: consent_service.check');await sleep(650);
+ cpStep(S.optin?`<span class="k">TOOL</span> portal_activity.get("Lim S. Y.", 90d) → <span class="ok">insights opt-in ✓</span> logins −60%, private-markets articles ×5 · ${qs.length?`questions shared with consent ×${qs.length}`:'no questions shared (private questions excluded)'}`:'<span class="k">TOOL</span> portal_activity.get("Lim S. Y.") → <span class="warn">blocked: heir has not opted in · using engagement alert only</span>');log('RM Copilot','Tool call: portal_activity.get');await sleep(650);
+ cpStep('<span class="k">RAG </span> knowledge_base.search("private markets, next-gen") → 2 approved documents: “Introduction to private markets”, “Product shelf overview”');log('RM Copilot','Retrieved 2 approved documents (RAG)');await sleep(650);
+ cpStep('<span class="k">TOOL</span> rm_calendar.free_slots("J. Ong", next 7 days) → Tue 10:00, Thu 17:00');log('RM Copilot','Tool call: rm_calendar.free_slots');await sleep(650);
+ cpStep('<span class="k">GUARD</span> No personal investment advice <span class="ok">✓</span> · only consented data <span class="ok">✓</span> · sources cited <span class="ok">✓</span>');await sleep(500);
+ cpStep('<span class="k">STOP </span> 3 actions proposed · <span class="warn">waiting for RM approval</span>');
+ cp.msg=CP_MSG;cp.slots=['Tue 10:00','Thu 17:00'];cp.acts=[{t:'Send the invitation message to S. Y. (as J. Ong)'},{t:'Offer video-call slots: Tue 10:00 or Thu 17:00'},{t:'Log the outreach as a CRM note'}];
+ cp.state='ready';log('RM Copilot','Proposed 3 actions · awaiting RM approval');render()}
+async function approveCopilot(){const cp=S.cp,a=S.alerts[0];cp.state='executing';log('J. Ong','Approved RM Copilot actions');render();
+ for(let i=0;i<cp.acts.length;i++){await sleep(600);cp.acts[i].done=true;log('RM Copilot (approved by J. Ong)',['Sent invitation message to Lim S. Y.','Offered video-call slots Tue 10:00 / Thu 17:00','Logged outreach in CRM'][i]);render()}
+ S.inbox.push({from:'J. Ong',text:cp.msg,slots:cp.slots,status:'new'});a.status='approved';a.draft=cp.msg;cp.state='done';
+ toast('Copilot executed 3 approved actions · logged');render()}
+function editCopilot(){modal(`<h2>Edit the Copilot's message</h2><p class="sub">Your edits are saved with the original AI text for the audit trail.</p><textarea id="ed" style="margin-top:12px">${esc(S.cp.msg)}</textarea><div class="row" style="margin-top:12px;justify-content:flex-end"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn p" onclick="S.cp.msg=$('#ed').value;log('J. Ong','Edited RM Copilot draft');closeModal();toast('Draft updated');render()">Save edit</button></div>`)}
+function copilotCard(a){const h=S.heirs.sy,cp=S.cp;
+ const so=`<dl class="so"><dt>Risk level</dt><dd><span class="pill bad">HIGH</span></dd><dt>Trigger</dt><dd>Engagement score fell from 71 to 38 in 6 months</dd><dt>Evidence</dt><dd>Logins −60% in 90 days · no RM contact for 11 months · read private-markets content 5 times</dd><dt>Suggested goal</dt><dd>Invite her to a video call on private-market options</dd></dl>`;
+ const head=`<div class="cphd"><b>✦ RM Copilot</b><span class="tag ag">AGENTIC · plans, calls approved tools, acts only after your approval</span></div>`;
+ if(a.status==='dismissed')return `<div class="card">${statusPill('dismissed')}<h3 style="margin-top:10px">${esc(a.title)}</h3><p class="sub">Alert dismissed with reason. Logged to the audit trail.</p></div>`;
+ const logbox=cp.steps.length?`<div class="cplog">${cp.steps.map(x=>`<div>${x}</div>`).join('')}${cp.state==='running'?'<div class="dim">…</div>':''}</div>`:'';
+ const acts=cp.acts.length?`<div class="acts">${cp.acts.map((x,i)=>`<div class="act ${x.done?'done':''}"><span class="n">${x.done?'✓':i+1}</span><div>${x.t}${i===0?`<div class="ai" style="margin-top:6px"><div class="l">${cp.state==='done'?'Sent · RM-approved':'Draft message · RM review required'}</div>${esc(cp.msg)}</div>`:''}</div></div>`).join('')}</div>`:'';
+ let btns='';
+ if(cp.state==='idle')btns=`<button class="btn p" onclick="runCopilot()">▶ Run RM Copilot</button><button class="btn" onclick="dismiss(${a.id})">Dismiss with reason</button>`;
+ if(cp.state==='ready')btns=`<button class="btn p" onclick="approveCopilot()">Approve &amp; let Copilot execute</button><button class="btn" onclick="editCopilot()">Edit draft</button><button class="btn" onclick="dismiss(${a.id})">Dismiss with reason</button>`;
+ const status=cp.state==='done'?`<p style="margin-top:10px"><span class="pill ok">✓ 3 approved actions executed · logged</span></p>`:cp.state==='executing'?'<p class="sub" style="margin-top:10px">Executing approved actions…</p>':'';
+ return `<div class="card alert"><div style="color:var(--red);font-weight:700;font-size:16px">⚠ Alert: ${esc(a.title)}</div>${so}
+ <div class="cp" style="margin-top:12px">${head}${logbox}${acts}${btns?`<div class="row" style="margin-top:12px;flex-wrap:wrap">${btns}</div>`:''}${status}
+ <p class="bound"><b>Can do after approval:</b> send RM-approved messages, offer and book meeting slots, log CRM notes. <b>Never:</b> trades, changes to family permissions, investment advice.</p></div></div>`}
+function alertCard(a){if(a.id===1)return copilotCard(a);const h=a.heir?S.heirs[a.heir]:null;
+ if(a.status!=='open')return `<div class="card">${statusPill(a.status)}<h3 style="margin-top:10px">${esc(a.title)}</h3><p class="sub" style="margin-top:6px">${a.status==='approved'?'Outreach approved and sent. Logged to the audit trail.':'Alert dismissed with reason. Logged to the audit trail.'}</p><div class="ai"><div class="l">Final message (RM-approved)</div>${esc(a.draft)}</div></div>`;
+ return `<div class="card alert"><div style="color:var(--red);font-weight:700;font-size:16px">⚠ Alert: ${esc(a.title)}</div>
+ ${h?`<ul style="margin:8px 0 0 18px;line-height:1.7"><li>Engagement score fell from 71 to 38 over the last 6 months</li><li>Interest signals point to private markets, which the current mandate does not hold</li><li><b>Suggested action:</b> invite her to a video call on private-market options</li></ul>`:''}
+ <div class="ai"><div class="l">AI-drafted summary · RM review required before anything is sent</div>${esc(a.draft)}</div>
+ <div class="row" style="margin-top:12px;flex-wrap:wrap"><button class="btn p" onclick="approve(${a.id})">Approve outreach</button><button class="btn" onclick="editDraft(${a.id})">Edit draft</button><button class="btn" onclick="dismiss(${a.id})">Dismiss with reason</button></div></div>`}
+function approve(id){const a=S.alerts.find(x=>x.id==id);a.status='approved';log('J. Ong',`Approved outreach for "${a.title}"`);toast('Outreach approved · invitation sent to client · logged');render()}
+function editDraft(id){const a=S.alerts.find(x=>x.id==id);modal(`<h2>Edit AI draft</h2><p class="sub">Your edits are saved with the original AI text for the audit trail.</p><textarea id="ed" style="margin-top:12px">${esc(a.draft)}</textarea><div class="row" style="margin-top:12px;justify-content:flex-end"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn p" onclick="saveDraft(${id})">Save edit</button></div>`)}
+function saveDraft(id){const a=S.alerts.find(x=>x.id==id);a.draft=$('#ed').value;log('J. Ong','Edited AI draft');closeModal();toast('Draft updated');render()}
+function dismiss(id){modal(`<h2>Dismiss alert</h2><label class="f">Reason (required)</label><select class="f" id="rs"><option>Already in contact with the client</option><option>Alert not relevant</option><option>Client asked not to be contacted</option></select><div class="row" style="margin-top:14px;justify-content:flex-end"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn p" onclick="doDismiss(${id})">Dismiss</button></div>`)}
+function doDismiss(id){const a=S.alerts.find(x=>x.id==id);a.status='dismissed';log('J. Ong',`Dismissed "${a.title}" · reason: ${$('#rs').value}`);closeModal();toast('Alert dismissed · logged');render()}
+function chartSVG(){const sc=S.heirs.sy.score,y=170-sc*1.5;return `<svg viewBox="0 0 400 200" width="100%" role="img" aria-label="Engagement score over 12 months: J. W. rises to 74, S. Y. at ${sc}" font-family="inherit" font-size="12">
+<g stroke="#e6eaf1"><line x1="34" y1="20" x2="330" y2="20"/><line x1="34" y1="70" x2="330" y2="70"/><line x1="34" y1="120" x2="330" y2="120"/><line x1="34" y1="170" x2="330" y2="170"/></g>
+<g fill="#6b7690"><text x="26" y="24" text-anchor="end">100</text><text x="26" y="74" text-anchor="end">67</text><text x="26" y="124" text-anchor="end">33</text><text x="26" y="174" text-anchor="end">0</text><text x="34" y="190">Nov</text><text x="180" y="190" text-anchor="middle">May</text><text x="330" y="190" text-anchor="end">Oct</text></g>
+<polyline fill="none" stroke="#d9822b" stroke-width="2.5" stroke-linejoin="round" points="34,70 61,64 88,61 115,64 142,67 169,64 196,63.5 223,78 250,97 277,112 304,124 330,${y}"/>
+<polyline fill="none" stroke="#2e6fb7" stroke-width="2.5" stroke-linejoin="round" points="34,100 61,94 88,88 115,85 142,79 169,82 196,76 223,73 250,70 277,67 304,64 330,59"/>
+<circle cx="330" cy="${y}" r="4.5" fill="#d9822b" stroke="#fff" stroke-width="2"/><circle cx="330" cy="59" r="4.5" fill="#2e6fb7" stroke="#fff" stroke-width="2"/>
+<text x="338" y="63" fill="#1d2b45" font-weight="600">J. W. 74</text><text x="338" y="${y+4}" fill="#1d2b45" font-weight="600">S. Y. ${sc}</text></svg>`}
+V['#/rm/family/lim']=()=>{const a=S.alerts[0],p=S.perms;const ck=v=>v?'<span style="color:var(--okc);font-weight:700">✓</span>':'<span style="color:var(--red);font-weight:700">✕</span>';
+ const lab={bad:'▼ High attrition risk',warn:'◐ Recovering',ok:'● Engaged'};
+ const heirCard=h=>`<div class="card"><div class="cardhd"><div><b style="font-size:16px">${h.name}</b><div class="sub">${h.rel} · ${h.age}</div></div><div class="score">${h.score}<small>/100</small></div></div>
+ <span class="pill ${h.status}" style="margin-top:6px">${lab[h.status]}</span><p class="signal">${h.signal}</p>
+ <details><summary>More signals ▾</summary><div class="facts" style="margin-top:6px">${h.facts.join('<br>')}<br>On the portal since ${h.joined}</div></details></div>`;
+ const meet=S.meetings;
+ return `<div class="hd"><div><h1>Lim Family</h1><p class="sub">AUM SGD 42m · 3 members on platform · RM: J. Ong</p></div></div>
+ <div class="grid g3"><div class="card"><b style="font-size:16px">Mr Lim K. H.</b><div class="sub">Wealth holder · 68</div><span class="pill neu" style="margin-top:6px">Active · met 3 weeks ago</span><p class="signal">Succession plan: trust in progress</p></div>${heirCard(S.heirs.sy)}${heirCard(S.heirs.jw)}</div>
+ <div class="grid g21" style="margin-top:16px"><div>${alertCard(a)}</div><div class="card"><h3>Engagement score, last 12 months</h3>${chartSVG()}</div></div>
+ <div class="grid g21" style="margin-top:16px"><div class="card"><h3>What each heir can see (set by Mr Lim)</h3><table><tr><th>Item</th><th>S. Y.</th><th>J. W.</th></tr>
+ <tr><td>Portfolio summary</td><td>${ck(p.sy.summary)}</td><td>${ck(p.jw.summary)}</td></tr><tr><td>Individual holdings</td><td>${ck(p.sy.holdings)}</td><td>${ck(p.jw.holdings)}</td></tr>
+ <tr><td>Estate-plan milestones</td><td>${ck(p.sy.estate)}</td><td>${ck(p.jw.estate)}</td></tr><tr><td>AI assistant</td><td>${ck(p.sy.assistant)}</td><td>${ck(p.jw.assistant)}</td></tr></table></div>
+ <div class="card"><h3>Upcoming meetings</h3>${meet.length?meet.map(m=>`<div class="ms">📹 ${m.who} · ${m.slot}<span class="pill ok">Booked</span></div>`).join(''):'<p class="sub" style="margin-top:4px">No meetings booked yet</p>'}
+ <h3 style="margin-top:14px">Questions shared with you</h3>${[...S.chat.heir.map(c=>c.ref&&['S. Y.',c.q]),...S.chat.holder.map(c=>c.ref&&['Mr Lim',c.q])].filter(Boolean).slice(-3).map(([w,q])=>`<div class="ms" style="font-size:13px;display:block"><b>${w}:</b> “${esc(q)}” <span class="pill warn">Shared by client · advice</span></div>`).join('')||'<p class="sub" style="margin-top:4px">Clients can choose to share assistant questions with you. Nothing is shared without their consent.</p>'}</div></div>`};
+V['#/rm/audit']=()=>`<div class="hd"><div><h1>Audit trail</h1><p class="sub">Every view, AI output and human decision in this demo session</p></div></div>
+<div class="card"><table class="log"><tr><th>Time</th><th>Who</th><th>Event</th></tr>${S.audit.map(e=>`<tr><td>${e.t}</td><td>${esc(e.who)}</td><td>${esc(e.what)}</td></tr>`).join('')}</table></div>`;
+
+// ---- Wealth holder ----
+const accessSummary=k=>{const p=S.perms[k];return Object.entries({summary:'Summary',holdings:'Holdings',estate:'Estate plan',assistant:'Assistant'}).filter(([x])=>p[x]).map(([,l])=>`<span class="chip">${l}</span>`).join('')||'<span class="sub">Nothing shared</span>'};
+V['#/holder/overview']=()=>`<div class="hd"><div><h1>Good morning, Mr Lim</h1><p class="sub">Your portfolio and your family's access at a glance</p></div><button class="btn pu" onclick="invite()">+ Invite family member</button></div>
+<div class="grid g2">${portfolio('holder')}
+<div class="grid" style="align-content:start"><div class="card"><h3>Family on the platform</h3><table><tr><th>Member</th><th>Can see</th><th>Status</th></tr>
+<tr><td>Lim S. Y. · daughter</td><td>${accessSummary('sy')}</td><td><span class="pill ok">Active</span></td></tr><tr><td>Lim J. W. · son</td><td>${accessSummary('jw')}</td><td><span class="pill ok">Active</span></td></tr>
+${S.invites.map(i=>`<tr><td>${esc(i.name)} · ${esc(i.rel.toLowerCase())}</td><td>${esc(i.level)}</td><td><span class="pill warn">Invited</span></td></tr>`).join('')}</table>
+<button class="btn" style="margin-top:12px;border-color:var(--purple);color:var(--purple)" onclick="go('#/holder/access')">Manage access ›</button></div>
+${rmCard('holder')}</div></div>`;
+V['#/holder/access']=()=>{const items=[['summary','Portfolio summary (asset mix, total value)'],['holdings','Individual holdings'],['estate','Estate-plan milestones'],['assistant','AI assistant (explain-only)']];
+ return `<div class="hd"><div><h1>Family access</h1><p class="sub">You decide what each family member sees. Changes apply immediately and are logged.</p></div><button class="btn pu" onclick="invite()">+ Invite family member</button></div>
+ <div class="card"><table><tr><th>What can they see?</th><th>Lim S. Y. (daughter)</th><th>Lim J. W. (son)</th></tr>
+ ${items.map(([k,l])=>`<tr><td>${l}</td>${['sy','jw'].map(h=>`<td><button class="tog ${S.perms[h][k]?'on':''}" aria-label="${l} for ${S.heirs[h].name}" onclick="togglePerm('${h}','${k}')"></button></td>`).join('')}</tr>`).join('')}</table>
+ <p class="sub" style="margin-top:10px">Tip: switch on “Individual holdings” for S. Y., then view her portal: she can now open each asset class.</p></div>`};
+function togglePerm(h,k){S.perms[h][k]=!S.perms[h][k];log('Mr Lim K. H.',`${S.perms[h][k]?'Granted':'Revoked'} ${k} access for ${S.heirs[h].name}`);toast('Access updated · logged');render()}
+function invite(){modal(`<h2>Invite a family member</h2><p class="sub">They'll verify their identity with national digital ID before seeing anything.</p>
+<label class="f">Full name</label><input type="text" id="in" placeholder="e.g. Lim M. T.">
+<label class="f">Relationship</label><select class="f" id="ir"><option>Grandchild</option><option>Spouse</option><option>Child</option><option>Family advisor</option></select>
+<label class="f">Email</label><input type="email" id="ie" placeholder="name@example.com">
+<label class="f">Starting access</label><select class="f" id="il"><option>Portfolio summary only</option><option>Estate plan only</option><option>Documents only (advisor)</option></select>
+<div class="row" style="margin-top:16px;justify-content:flex-end"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn pu" onclick="sendInvite()">Send invitation</button></div>`)}
+function sendInvite(){const n=$('#in').value.trim();if(!n){$('#in').focus();return}S.invites.push({name:n,rel:$('#ir').value,level:$('#il').value});log('Mr Lim K. H.',`Invited ${n} (${$('#ir').value})`);closeModal();toast('Invitation sent · logged');go('#/holder/overview');render()}
+V['#/holder/assistant']=()=>assistant('holder');
+V['#/holder/estate']=()=>kanban('holder');
+V['#/holder/rm']=()=>rmPage('holder');
+
+// ---- Heir ----
+V['#/heir/overview']=()=>{const p=S.perms.sy;const done=MILESTONES.filter(m=>m.s==='done').length,prog=MILESTONES.filter(m=>m.s==='prog').length;
+ return `<div class="hd"><div><h1>Welcome back, S. Y.</h1><p class="sub">Lim Family · You can see what your father has chosen to share · Your RM: J. Ong</p></div></div>
+ ${heirInbox()}<div class="grid g12"><div class="grid" style="align-content:start">${portfolio('heir')}
+ <div class="card"><h3>Estate plan</h3>${p.estate?`<p class="sub">${MILESTONES.length} milestones · ${done} done, ${prog} in progress · next: family meeting, Q1 2027</p><button class="btn g" style="margin-top:10px" onclick="go('#/heir/estate')">View timeline ›</button>`:'<p class="empty">🔒 Not shared</p>'}</div></div>
+ <div class="grid" style="align-content:start"><div class="card"><h3>Ask the AI Wealth Assistant</h3><p class="sub">Explains in plain language using bank-approved content. Your RM gives advice.</p>
+ ${p.assistant?`<div class="sugs">${sugChips('heir')}</div><button class="btn gp" style="margin-top:14px" onclick="go('#/heir/assistant')">Open assistant ›</button>`:'<p class="empty">🔒 Assistant not enabled</p>'}</div>
+ ${rmCard('heir')}</div></div>`};
+function heirInbox(){const m=S.inbox.find(x=>x.status==='new');if(!m)return '';
+ return `<div class="card inbox" style="margin-bottom:16px"><h3>Message from your RM, ${m.from}</h3><p style="margin-top:6px;line-height:1.55">${esc(m.text)}</p>
+ <div class="row" style="margin-top:10px;flex-wrap:wrap">${m.slots.map(s=>`<button class="btn gp" onclick="acceptSlot('${s}')">Book ${s}</button>`).join('')}<span class="sub">Video call · Private-market options</span></div></div>`}
+function acceptSlot(s){const m=S.inbox.find(x=>x.status==='new');m.status='done';S.meetings.push({role:'heir',who:'Lim S. Y.',slot:`${s} · Private-market options`});
+ const h=S.heirs.sy;h.score=52;h.status='warn';h.signal='Accepted the RM’s video-call invitation · engagement recovering';log('Lim S. Y.',`Accepted RM invitation (${s})`);toast('Video call booked · J. Ong notified');render()}
+V['#/heir/assistant']=()=>assistant('heir');
+V['#/heir/estate']=()=>kanban('heir');
+V['#/heir/rm']=()=>rmPage('heir');
+
+// ---------- router ----------
+function render(){let h=location.hash||'#/';const m=h.match(/^#\/(rm|holder|heir)\//);
+ if(m&&S.user!==m[1]){S.user=m[1];$('#who').value=m[1]}
+ if(h==='#/'){S.user=null;$('#who').value=''}
+ bar();let view=V[h];if(!view&&h.startsWith('#/rm/alert/'))view=()=>V['#/rm/alert'](h.split('/').pop());
+ $('#app').innerHTML=(view||(()=>'<p class="empty">Page not found. <a href="#/">Start again</a></p>'))();
+ const cb=$('#cb');if(cb)cb.scrollTop=cb.scrollHeight}
+let lastHash='';
+window.addEventListener('hashchange',()=>{const h=location.hash;
+ const views={'#/rm/family/lim':['J. Ong','Viewed Lim Family dashboard'],'#/heir/overview':['Lim S. Y.','Viewed shared family portfolio summary']};
+ if(views[h]&&h!==lastHash)log(...views[h]);lastHash=h;render();window.scrollTo(0,0)});
+render();
+</script></body></html>
